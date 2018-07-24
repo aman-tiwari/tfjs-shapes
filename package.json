@@ -1,6 +1,6 @@
 {
   "name": "tfjs-shapes",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Backend for Tensorflow.js that just computes tensor shapes and dtypes",
   "main": "dist/index.js",
   "license": "MIT",
@@ -14,6 +14,11 @@
   "devDependencies": {
     "@types/node": "^10.5.2",
     "ts-node-dev": "^1.0.0-pre.26",
-    "typescript": "^3.1.0-dev.20180721"
-  }
+    "typescript": "^2.7.2"
+  },
+  "licenses": [
+    {
+      "licence": "Apache-2.0"
+    }
+  ]
 }
