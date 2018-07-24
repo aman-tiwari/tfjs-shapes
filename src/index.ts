@@ -17,5 +17,8 @@ export function shapesOnly(fn: () => any) {
   tfc.setBackend(SHAPE_BACKEND_NAME);
   const ret = tfc.tidy(fn);
   tfc.setBackend(currBackend);
+  if(ret instanceof Promise) {
+    throw new Error('shapesOnly doesn\'t support async functions');
+  }
   return ret;
 };
