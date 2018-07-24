@@ -13,7 +13,7 @@ tfc.ENV.registerBackend(SHAPE_BACKEND_NAME, () => new ShapeBackend());
  */
 
 export function shapesOnly(fn: () => any) {
-  const currBackend = tfc.getBackend();
+  const currBackend = tfc.getBackend() || tfc.ENV.findBackend('webgl') ? 'webgl' : 'cpu';
   tfc.setBackend(SHAPE_BACKEND_NAME);
   const ret = tfc.tidy(fn);
   tfc.setBackend(currBackend);
