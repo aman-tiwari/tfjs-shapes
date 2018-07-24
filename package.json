@@ -2,6 +2,7 @@
   "name": "tfjs-shapes",
   "version": "0.0.8",
   "description": "Backend for Tensorflow.js that just computes tensor shapes and dtypes",
+  "homepage": "https://github.com/aman-tiwari/tfjs-shapes",
   "main": "dist/index.js",
   "license": "Apache-2.0",
   "scripts": {
