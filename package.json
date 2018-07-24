@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "Backend for Tensorflow.js that just computes tensor shapes and dtypes",
   "main": "dist/index.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "yarn run tsc",
     "prepublish": "yarn build"
@@ -19,9 +19,12 @@
   "files": [
     "dist/*"
   ],
-  "licenses": [
-    {
-      "licence": "Apache-2.0"
-    }
+  "keywords": [
+    "machine learning",
+    "tensorflow",
+    "tfjs",
+    "ml",
+    "tensorflow.js",
+    "shapes"
   ]
 }
