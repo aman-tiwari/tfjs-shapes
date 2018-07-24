@@ -1,0 +1,19 @@
+{
+  "name": "tfjs-shapes",
+  "version": "0.0.1",
+  "description": "Backend for Tensorflow.js that just computes tensor shapes and dtypes",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn run tsc",
+    "prepublish": "yarn build"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-core": "^0.12.5"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.2",
+    "ts-node-dev": "^1.0.0-pre.26",
+    "typescript": "^3.1.0-dev.20180721"
+  }
+}
