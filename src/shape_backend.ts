@@ -42,106 +42,106 @@ export interface BackendTimingInfo {
 }
 
 export class ShapeBackend implements KernelBackend {
-  private data = new WeakSet<DataId>();
-  private tensorCount = 0;
+  private data_ = new WeakSet<DataId>();
+  private tensorCount_ = 0;
 
   // Unary op that doesn't change tensor shape
-  private mappingOp<T extends Tensor>(x: T, ...args: any[]): T {
+  private mappingOp_<T extends Tensor>(x: T, ...args: any[]): T {
     return MetadataTensor.of(x.shape, x.dtype) as T;
   }
 
-  public reverse = this.mappingOp;
+  public reverse = this.mappingOp_;
 
-  public neg = this.mappingOp;
+  public neg = this.mappingOp_;
 
-  public ceil = this.mappingOp;
+  public ceil = this.mappingOp_;
 
-  public floor = this.mappingOp;
+  public floor = this.mappingOp_;
 
-  public sign = this.mappingOp;
+  public sign = this.mappingOp_;
 
-  public round = this.mappingOp;
+  public round = this.mappingOp_;
 
-  public exp = this.mappingOp;
+  public exp = this.mappingOp_;
 
-  public expm1 = this.mappingOp;
+  public expm1 = this.mappingOp_;
 
-  public log = this.mappingOp;
+  public log = this.mappingOp_;
 
-  public log1p = this.mappingOp;
+  public log1p = this.mappingOp_;
 
-  public sqrt = this.mappingOp;
+  public sqrt = this.mappingOp_;
 
-  public rsqrt = this.mappingOp;
+  public rsqrt = this.mappingOp_;
 
-  public square = this.mappingOp;
+  public square = this.mappingOp_;
 
-  public reciprocal = this.mappingOp;
+  public reciprocal = this.mappingOp_;
 
-  public relu = this.mappingOp;
+  public relu = this.mappingOp_;
 
-  public elu = this.mappingOp;
+  public elu = this.mappingOp_;
 
-  public eluDer = this.mappingOp;
+  public eluDer = this.mappingOp_;
 
-  public selu = this.mappingOp;
+  public selu = this.mappingOp_;
 
-  public clip = this.mappingOp;
+  public clip = this.mappingOp_;
 
-  public abs = this.mappingOp;
+  public abs = this.mappingOp_;
 
-  public sigmoid = this.mappingOp;
+  public sigmoid = this.mappingOp_;
 
-  public softplus = this.mappingOp;
+  public softplus = this.mappingOp_;
 
-  public sin = this.mappingOp;
+  public sin = this.mappingOp_;
 
-  public cos = this.mappingOp;
+  public cos = this.mappingOp_;
 
-  public tan = this.mappingOp;
+  public tan = this.mappingOp_;
 
-  public asin = this.mappingOp;
+  public asin = this.mappingOp_;
 
-  public acos = this.mappingOp;
+  public acos = this.mappingOp_;
 
-  public atan = this.mappingOp;
+  public atan = this.mappingOp_;
 
-  public atan2 = this.mappingOp;
+  public atan2 = this.mappingOp_;
 
-  public sinh = this.mappingOp;
+  public sinh = this.mappingOp_;
 
-  public cosh = this.mappingOp;
+  public cosh = this.mappingOp_;
 
-  public tanh = this.mappingOp;
+  public tanh = this.mappingOp_;
 
-  public asinh = this.mappingOp;
+  public asinh = this.mappingOp_;
 
-  public acosh = this.mappingOp;
+  public acosh = this.mappingOp_;
 
-  public atanh = this.mappingOp;
+  public atanh = this.mappingOp_;
 
-  public erf = this.mappingOp;
+  public erf = this.mappingOp_;
 
-  public step = this.mappingOp;
+  public step = this.mappingOp_;
 
   public read(dataId: DataId): Promise<TypedArray> {
-    if (!this.data.has(dataId)) {
+    if (!this.data_.has(dataId)) {
       throw new Error('DataId not registered');
     }
     return Promise.resolve(new Uint8Array(0));
   }
 
   public readSync(dataId: DataId): TypedArray {
-    if (!this.data.has(dataId)) {
+    if (!this.data_.has(dataId)) {
       throw new Error('DataId not registered');
     }
     return new Uint8Array(0);
   }
 
   public disposeData(dataId): void {
-    if (this.data.has(dataId)) {
-      this.data.delete(dataId);
-      this.tensorCount--;
+    if (this.data_.has(dataId)) {
+      this.data_.delete(dataId);
+      this.tensorCount_--;
     }
   }
   public write(dataId: DataId, values: TypedArray): void {}
@@ -155,15 +155,15 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public register(dataId: DataId, shape: number[], dtype: DataType): void {
-    if (this.data.has(dataId)) {
+    if (this.data_.has(dataId)) {
       throw new Error('DataId is already registered');
     }
-    this.data.add(dataId);
-    this.tensorCount++;
+    this.data_.add(dataId);
+    this.tensorCount_++;
   }
 
   public memory(): {unreliable: boolean;} {
-    return {unreliable: true, numTensors: this.tensorCount} as {
+    return {unreliable: true, numTensors: this.tensorCount_} as {
       unreliable: boolean;
     };
   }  // Backend-specific information.
@@ -210,25 +210,25 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public add(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
                a, b, types.upcastType(a.dtype, b.dtype),
                (aValue, bValue) => aValue + bValue) as Tensor;
   }
 
   public subtract(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
                a, b, types.upcastType(a.dtype, b.dtype),
                (aValue, bValue) => aValue - bValue) as Tensor;
   }
 
   public pow<T extends Tensor>(a: T, b: Tensor): T {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
                a, b, a.dtype, (aValue, bValue) => Math.pow(aValue, bValue)) as
         T;
   }
 
   public multiply(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
                a, b, types.upcastType(a.dtype, b.dtype),
                (aValue, bValue) => aValue * bValue) as Tensor;
   }
@@ -236,13 +236,13 @@ export class ShapeBackend implements KernelBackend {
   public realDivide(a: Tensor, b: Tensor): Tensor {
     const op = (a: number, b: number) => a / b;
     const outputDtype = 'float32';
-    return this.broadcastedBinaryOp(a, b, outputDtype, op) as Tensor;
+    return this.broadcastedBinaryOp_(a, b, outputDtype, op) as Tensor;
   }
 
   public floorDiv(a: Tensor, b: Tensor): Tensor {
     const op = (a: number, b: number) => Math.floor(a / b);
     const outputDtype = 'int32';
-    return this.broadcastedBinaryOp(a, b, outputDtype, op) as Tensor;
+    return this.broadcastedBinaryOp_(a, b, outputDtype, op) as Tensor;
   }
 
   public sum(x: Tensor, axes: number[]): Tensor {
@@ -285,37 +285,37 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public equal(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal === bVal) ? 1 : 0;
     });
   }
 
   public notEqual(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal !== bVal) ? 1 : 0;
     });
   }
 
   public less(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal < bVal) ? 1 : 0;
     });
   }
 
   public lessEqual(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal <= bVal) ? 1 : 0;
     });
   }
 
   public greater(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal > bVal) ? 1 : 0;
     });
   }
 
   public greaterEqual(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return (aVal >= bVal) ? 1 : 0;
     });
   }
@@ -325,13 +325,13 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public logicalAnd(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return aVal && bVal;
     });
   }
 
   public logicalOr(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, 'bool', (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, 'bool', (aVal, bVal) => {
       return aVal || bVal;
     });
   }
@@ -374,12 +374,12 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public minimum(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
         a, b, a.dtype, (aVal, bVal) => Math.min(aVal, bVal));
   }
 
   public mod(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, a.dtype, (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, a.dtype, (aVal, bVal) => {
       const rem = aVal % bVal;
       if ((aVal < 0 && bVal < 0) || (aVal >= 0 && bVal >= 0)) {
         return rem;
@@ -396,7 +396,7 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public maximum(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(
+    return this.broadcastedBinaryOp_(
         a, b, a.dtype, (aVal, bVal) => Math.max(aVal, bVal));
   }
 
@@ -413,7 +413,7 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public squaredDifference(a: Tensor, b: Tensor): Tensor {
-    return this.broadcastedBinaryOp(a, b, a.dtype, (aVal, bVal) => {
+    return this.broadcastedBinaryOp_(a, b, a.dtype, (aVal, bVal) => {
       const diff = aVal - bVal;
       return diff * diff;
     });
@@ -498,7 +498,7 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public maxPool(x: Tensor4D, convInfo: Conv2DInfo): Tensor4D {
-    return this.pool(x, convInfo, 'max');
+    return this.pool_(x, convInfo, 'max');
   }
 
   public maxPoolBackprop(
@@ -521,7 +521,7 @@ export class ShapeBackend implements KernelBackend {
   }
 
   public avgPool(x: Tensor4D, convInfo: Conv2DInfo): Tensor4D {
-    return this.pool(x, convInfo, 'avg').toFloat();
+    return this.pool_(x, convInfo, 'avg').toFloat();
   }
 
   public resizeBilinear(
@@ -593,13 +593,13 @@ export class ShapeBackend implements KernelBackend {
 
   public dispose() {}
 
-  private pool(x: Tensor4D, convInfo: Conv2DInfo, poolType: 'max'|'avg'):
+  private pool_(x: Tensor4D, convInfo: Conv2DInfo, poolType: 'max'|'avg'):
       Tensor4D {
     return MetadataTensor.of(convInfo.outShape, 'float32') as
         MetadataTensor<Rank.R4>;
   }
 
-  private broadcastedBinaryOp(
+  private broadcastedBinaryOp_(
       a: Tensor, b: Tensor, dtype: DataType,
       op: (a: number, b: number) => number): Tensor {
     const newShape =
